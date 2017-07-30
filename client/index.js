@@ -6,6 +6,7 @@ import App from './components/App';
 import ProjectCreate from './components/ProjectCreate';
 import ProjectList from './components/ProjectList';
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
+import './style/style.css';
 
 const client = new ApolloClient({});
 
