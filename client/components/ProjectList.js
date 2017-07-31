@@ -15,7 +15,7 @@ class ProjectList extends Component {
         return this.props.data.projects.map(({ title, id }) => {
             return (
                 <li key={id} className="collection-item">
-                    {title}
+                    <Link to={`/project/${id}`}>{title}</Link>
                     <i className="material-icons right" onClick={() => this.onProjectDelete(id)}>delete</i>
                 </li>
             )

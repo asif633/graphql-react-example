@@ -1,5 +1,6 @@
 ## GraphQL with Express, MongoDB, React Apollo
 
+### Server Side
 We have two models at start Project has multiple Tasks
 
 ```
@@ -206,5 +207,80 @@ module.exports = mutation;
 
 ApolloProvider wraps React and ApolloStore is the slient side store which connects to
 GraphQL server. ApolloProvider connects with ApolloStore.
+
+### Client Side
+
+To fetch list of projects
+
+```
+import gql from 'graphql-tag';
+
+export default gql`
+    {
+        projects{
+            id
+            title
+        }
+    }
+`
+```
+
+Render projects
+
+```
+    renderProjects(){
+        return this.props.data.projects.map(({ title, id }) => {
+            return (
+                <li key={id} className="collection-item">
+                    <Link to={`/project/${id}`}>{title}</Link>
+                    <i className="material-icons right" onClick={() => this.onProjectDelete(id)}>delete</i>
+                </li>
+            )
+        })
+    }
+```
+
+Delete Mutation
+
+```
+const mutation = gql`
+    mutation DeleteProject($id: ID){
+        deleteProject(id: $id){
+            id
+        }
+    }
+`
+```
+
+Use of `mutate` method
+
+```
+    onProjectDelete(id){
+        this.props.mutate({
+            variables: { id }
+        })
+        .then(() => this.props.data.refetch());
+    }
+```
+
+Use
+
+```
+        this.props.mutate({
+            variables: {
+                title: this.state.title
+            },
+            refetchQueries: [{ query }]
+        }).then(() => hashHistory.push('/'));
+```
+
+when the refetch is happening on other component.
+
+We can use `dataIdFromObject: o => o.id` which also works to refetch data in other component.
+```
+const client = new ApolloClient({
+    dataIdFromObject: o => o.id
+});
+```
 
 
